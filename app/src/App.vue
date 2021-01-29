@@ -9,7 +9,7 @@ import { initShaderProgram } from "./gl";
 import { mat4 } from "gl-matrix";
 
 const vsSource = `
-attribute vec3 aVertexPosition;
+attribute vec4 aVertexPosition;
 attribute vec4 aVertexColor;
 
 uniform mat4 uModelViewMatrix;
@@ -19,6 +19,7 @@ varying lowp vec4 vColor;
 
 void main() {
   gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+  vColor = aVertexColor;
 }
 `;
 
@@ -63,7 +64,7 @@ const initBuffers = (gl: WebGLRenderingContext): Buffers => {
     0.0,
     -1.0,
     -1.0,
-    0.0
+    0.0,
   ]);
   gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
@@ -174,7 +175,7 @@ export default {
             shaderProgram,
             "aVertexPosition"
           ),
-          colorPosition: gl.getAttribLocation(shaderProgram, "aColorPosition")
+          colorPosition: gl.getAttribLocation(shaderProgram, "aVertexColor")
         },
         uniformLocations: {
           projectionMatrix: gl.getUniformLocation(
